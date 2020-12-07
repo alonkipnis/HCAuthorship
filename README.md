@@ -3,7 +3,7 @@
 This repository contains code and dataset or dataset description used to obtain the results reported in 
 <ul>
  <li> 
-[1] Alon Kipnis, ``Higher Criticism for Discriminating Word-Frequency Tables and Testing Authorship'', 2019
+[1] Alon Kipnis, <a href = >``Higher Criticism for Discriminating Word-Frequency Tables and Authorship Attribution''</a>, 2019
   </li>
 </ul>
 

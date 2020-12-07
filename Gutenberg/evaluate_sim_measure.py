@@ -11,8 +11,6 @@ from sklearn.neighbors import KNeighborsClassifier
 import sys
 from evaluate_classifier import evaluate_classifier
 
-data_filename = 'Gutenberg_reduced_100.csv'
-
 cloud_path = '/scratch/users/kipnisal/Gutenberg/'
 local_path = '/Users/kipnisal/Data/Gutenberg/'
 
@@ -36,22 +34,18 @@ clf_names=[
 'freq_table_chisq',
 'freq_table_cosine',
 'freq_table_LL',
-#'freq_table_modLL',
-#'freq_table_FT',
-#'freq_table_Neyman',
 'freq_table_CR',
 'freq_table_HC',
 'multinomial_NB',
 'KNN_5',
 'KNN_2',
-#'logistic_regression',
 'SVM'
 ]
 
 vocab_sizes=[250, 1000, 3000]
 df = pd.DataFrame()
 
-n_split=10
+n_split = 10
 no_clf = 9
 no_vocab_sizes = 3
 for ic in range(no_clf) :

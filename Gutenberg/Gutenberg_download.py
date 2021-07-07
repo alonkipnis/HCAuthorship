@@ -35,6 +35,8 @@ def download_etext(formats) :
                 txt = BeautifulSoup(txt, "html.parser").text
                 
             break # until succeed
+        except KeyboardInterrupt:
+                exit(1)
         except :
             None
     return txt
@@ -49,11 +51,15 @@ def download_full_texts(db, out_path) :
               # checking if title already exists
               open(out_path + "Gut_{}.csv".format(r[0]))
               continue
+            except KeyboardInterrupt:
+                exit(1)
             except FileNotFoundError:
               print("Trying to download {} ...".format(r[1].title), end =" ")  
               try : 
                 text = strip_headers(down_etext(r[1].id)).strip()
-              except (NameError):
+              except KeyboardInterrupt:
+                exit(1)
+              except NameError:
                 try :
                     text = strip_headers(download_etext(r[1].formats)).strip()
                     print("succeeded.")

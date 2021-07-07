@@ -49,7 +49,8 @@ def download_full_texts(db, out_path) :
     for r in tqdm(db.iterrows()) :
             try :
               # checking if title already exists
-              open(out_path + "Gut_{}.csv".format(r[0]))
+              filename = "Gut_{}.csv".format(r[0])
+              open(out_path + '/' + filename)
               continue
             except KeyboardInterrupt:
                 exit(1)
@@ -77,7 +78,6 @@ def download_full_texts(db, out_path) :
                           'no_words' : len(text.split())
                           }, index = [r[0]])
 
-                filename = "Gut_{}.csv".format(r[0])
                 data.to_csv(out_path + '/' + filename)
     return data, exception_list
 

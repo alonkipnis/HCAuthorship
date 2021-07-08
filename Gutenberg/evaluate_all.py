@@ -4,6 +4,7 @@ import os
 import nltk
 from sklearn.model_selection import KFold
 import sys
+from evaluate_classifier import evaluate_classifier
 
 data_cloud_path = '/scratch/users/kipnisal/Data/Gutenberg'
 data_local_path = '/Users/kipnisal/Data/Gutenberg/Data'
@@ -30,7 +31,6 @@ except :
 sys.path.append(lib_path)
 from AuthAttLib import to_docTermCounts
 from FreqTable import FreqTable, FreqTableClassifier
-from evaluate_classifier import evaluate_classifier
 
 clf_names=[
 'freq_table_chisq',

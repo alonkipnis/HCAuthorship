@@ -8,38 +8,38 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 from sklearn.model_selection import KFold
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+import glob
 import sys
+from typing import List
 
 
-cloud_path = '/scratch/users/kipnisal/Gutenberg/'
-local_path = '/Users/kipnisal/Data/Gutenberg/'
+data_cloud_path = '/scratch/users/kipnisal/Data/Gutenberg'
+data_local_path = '/Users/kipnisal/Data/Gutenberg/Data'
 
-cloud_lib_path = '/scratch/users/kipnisal/Lib/AuthorshipAttribution/'
-local_lib_path = '/Users/kipnisal/Documents/Authorship/'
+cloud_lib_path = '/scratch/users/kipnisal/Lib/AuthorshipAttribution'
+local_lib_path = '/Users/kipnisal/Data/Gutenberg/HCAuthorship'
 
-local_filename = 'Gutenberg_reduced_30.csv'
-cloud_filename = 'Gutenberg_reduced.csv'
+cloud_vocab_file = '/Users/kipnisal/authorship/HCAuthorship/google-books-common-words.txt'
+local_vocab_file = '../google-books-common-words.txt'
 
 try :
-    os.listdir(cloud_path)
-    path = cloud_path
+    os.listdir(data_cloud_path)
+    data_path = data_cloud_path
     lib_path = cloud_lib_path
-    data_filename = cloud_filename
-    #vocab_file = '/scratch/users/kipnisal/Data/5000_most_common_english_words.csv'
-    vocab_file = '/scratch/users/kipnisal/Data/google-books-common-words.txt'
-
+    vocab_file = local_vocab_file
+    print('Running remotely')
 except :
-    print('Using local path')
-    path = local_path
+    print('Running locally')
+    data_path = data_local_path
     lib_path = local_lib_path
-    data_filename = local_filename
-    vocab_file = '/Users/kipnisal/Data/google-books-common-words.txt'
+    vocab_file = local_vocab_file
 
 sys.path.append(lib_path)
-from AuthAttLib import to_docTermCounts
-from FreqTable import FreqTable, FreqTableClassifier
+from AuthAttLib.AuthAttLib import to_docTermCounts
+from AuthAttLib.FreqTable import FreqTable, FreqTableClassifier
 
-#most_common_list = pd.read_csv(vocab_file).head(n).Word.unique().tolist()
+
 most_common_list = pd.read_csv(vocab_file, sep = '\t', header=None
                               ).iloc[:,0].str.lower().tolist()
 
@@ -74,6 +74,7 @@ lo_classifiers = {
             'KNN_2' : KNeighborsClassifier,
             'logistic_regression' : LogisticRegression,
             'SVM' : LinearSVC,
+            'NeuralNet' : MLPClassifier,
                 }
 
 lo_args = {'multinomial_NB' : {},
@@ -90,20 +91,31 @@ lo_args = {'multinomial_NB' : {},
                           'n_neighbors' : 5},
            'KNN_2' : {'metric' : 'cosine',
                           'n_neighbors' : 2},
-            'SVM' : {}
+            'SVM' : {'loss' : 'hinge'},
+            'NeuralNet' : {'hidden_layer_sizes' : (1000, 500, 500, 500, 500),
+            'early_stopping' : True,
+             'alpha' : 1, 'max_iter' : 1000, },
             }
 
-def evaluate_classifier(clf_name, vocab_size, n_split) :
+def read_data(data_path) :
+    fn = glob.glob(data_path + '/Gutenberg*.csv')
+    print(f"Found {len(fn)} data files")
+    if len(fn) != 1 :
+        print(f"Could not read data from {data_path}")
+        exit(1)
+    return pd.read_csv(fn)
+
+def evaluate_classifier(clf_name, vocab_size, n_split) -> List :
 
     clf = lo_classifiers[clf_name](**lo_args[clf_name])
 
     kf = KFold(n_splits=n_split, shuffle=True)
 
     #load data:
-    data = pd.read_csv(path + data_filename)
-    vocab = get_n_most_common_words(vocab_size)
+    data_df = read_data(data_path)
+    vocab = get_n_most_common_words(vocab_file)
 
-    X, y = get_counts_labels(data, vocab)
+    X, y = get_counts_labels(data_df, vocab)
 
     acc = []
     
@@ -114,4 +126,4 @@ def evaluate_classifier(clf_name, vocab_size, n_split) :
         clf.fit(X_train,y_train)
         acc += [clf.score(X_test, y_test)]
 
-    return np.mean(acc)
+    return acc

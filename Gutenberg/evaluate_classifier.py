@@ -99,6 +99,22 @@ def get_counts_labels(df, vocab) :
     
     return X, y
 
+def get_counts_labels_from_folder(data_folder_path, vocab) :
+    X = []
+    y = []
+    print(f"Reading data from {data_folder_path}....", end=" ")
+    lo_files = glob.glob(data_folder_path + '/*.csv')
+    print(f"Found {len(lo_files)} files.")
+    for fn in lo_files :
+        try :
+            dfr = pd.read_csv(fn)
+            dt = to_docTermCounts(dfr.text, vocab=vocab)
+            X += [FreqTable(dt[0], dt[1])._counts]
+            y += dfr.author.values[0]
+        except :
+            print(f"Could not read {fn}.")
+    return X, y
+
 
 def read_data(data_path) :
     fn = glob.glob(data_path + '/Gutenberg*.csv')
@@ -116,10 +132,13 @@ def evaluate_classifier(clf_name, vocab_size, n_split) -> List :
     kf = KFold(n_splits=n_split, shuffle=True)
 
     #load data:
-    data_df = read_data(data_path)
-    vocab = get_n_most_common_words(vocab_size)
+    
 
-    X, y = get_counts_labels(data_df, vocab)
+    vocab = get_n_most_common_words(vocab_size)
+    #data_df = read_data(data_path)
+    #X, y = get_counts_labels(data_df, vocab)
+
+    X, y = get_counts_labels_from_folder(data_path, vocab)    
 
     acc = []
     

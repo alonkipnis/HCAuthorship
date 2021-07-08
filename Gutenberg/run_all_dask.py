@@ -52,17 +52,21 @@ vocab_sizes=[100]
 n_split = 10
 
 
+def evaluate_classifier_d(params) :
+    return evaluate_classifier(params[0], params[1], params[2])
+
 if __name__ == '__main__':
     client = Client()
-
-
+    print(client)
 
     lo_fut = []
     lo_params = [(clf_name, vocab_size, n_split) for clf_name in clf_names for vocab_size in vocab_sizes]
-    for param in lo_params[:2] :
-        lo_fut += [client.map(evaluate_classifier, param[0], param[1], param[2])]
-            
-    res = client.gather(lo_fut)
+    for params in lo_params[:2] :
+        #lo_fut += [client.submit(evaluate_classifier_d, params)]
+        lo_fut += [evaluate_classifier_d(params)]
+    
+    res = lo_fut       
+    #res = client.gather(lo_fut)
 
     df = pd.DataFrame()
     for r,param in zip(res,lo_params) :

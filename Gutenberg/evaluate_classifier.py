@@ -43,21 +43,6 @@ from AuthAttLib.FreqTable import FreqTable, FreqTableClassifier
 most_common_list = pd.read_csv(vocab_file, sep = '\t', header=None
                               ).iloc[:,0].str.lower().tolist()
 
-def get_n_most_common_words(n = 5000) :
-    return most_common_list[:n]
-
-def get_counts_labels(df, vocab) :
-#prepare data:
-    X = []
-    y = []
-    for r in df.iterrows() :
-        dt = to_docTermCounts([r[1].text], 
-                            vocab=vocab
-                             )
-        X += [FreqTable(dt[0], dt[1])._counts]
-        y += [r[1].author]
-    
-    return X, y
 
 
 lo_classifiers = {
@@ -97,13 +82,32 @@ lo_args = {'multinomial_NB' : {},
              'alpha' : 1, 'max_iter' : 1000, },
             }
 
+
+def get_n_most_common_words(n = 5000) :
+    return most_common_list[:n]
+
+def get_counts_labels(df, vocab) :
+#prepare data:
+    X = []
+    y = []
+    for r in df.iterrows() :
+        dt = to_docTermCounts([r[1].text], 
+                            vocab=vocab
+                             )
+        X += [FreqTable(dt[0], dt[1])._counts]
+        y += [r[1].author]
+    
+    return X, y
+
+
 def read_data(data_path) :
     fn = glob.glob(data_path + '/Gutenberg*.csv')
-    print(f"Found {len(fn)} data files")
-    if len(fn) != 1 :
-        print(f"Could not read data from {data_path}")
+    if len(fn) == 0 :
+        print(f"Did not find any files in {data_path}")
         exit(1)
-    return pd.read_csv(fn)
+    print(f"Reading data from {fn[0]}")
+    return pd.read_csv(fn[0])
+
 
 def evaluate_classifier(clf_name, vocab_size, n_split) -> List :
 
@@ -113,7 +117,7 @@ def evaluate_classifier(clf_name, vocab_size, n_split) -> List :
 
     #load data:
     data_df = read_data(data_path)
-    vocab = get_n_most_common_words(vocab_file)
+    vocab = get_n_most_common_words(vocab_size)
 
     X, y = get_counts_labels(data_df, vocab)
 

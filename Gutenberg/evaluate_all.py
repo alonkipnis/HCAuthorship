@@ -17,20 +17,20 @@ local_vocab_file = '../google-books-common-words.txt'
 
 try :
     os.listdir(cloud_path)
-    data_path = cloud_path
+    data_path = data_cloud_path
     lib_path = cloud_lib_path
     vocab_file = local_vocab_file
     print('Running remotely')
 except :
     print('Running locally')
-    data_path = local_path
+    data_path = data_local_path
     lib_path = local_lib_path
     vocab_file = local_vocab_file
 
 
 sys.path.append(lib_path)
-from AuthAttLib import to_docTermCounts
-from FreqTable import FreqTable, FreqTableClassifier
+from AuthAttLib.AuthAttLib import to_docTermCounts
+from AuthAttLib.FreqTable import FreqTable, FreqTableClassifier
 
 clf_names=[
 'freq_table_chisq',
@@ -58,7 +58,7 @@ for ic in range(no_clf) :
         clf_name = clf_names[ic]
         print("classifier = {}".format(clf_name))
         print("vocab size = {}".format(vocab_size))
-        acc = evaluate_classifier(clf_name, vocab_size, n_split, data_path, vocab_file)
+        acc = evaluate_classifier(clf_name, vocab_size, n_split)
         print("avg. accuracy = {}".format(np.mean(acc)))
         df = df.append({'clf_name' : clf_name,
             'vocab_size' : vocab_size,

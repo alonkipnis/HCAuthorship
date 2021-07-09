@@ -11,13 +11,12 @@ from dask.distributed import Client
 
 clf_names=[
 'freq_table_chisq',
-#'freq_table_cosine',
+'freq_table_cosine',
 #'freq_table_LL',
 #'freq_table_CR',
 'freq_table_HC',
 #'multinomial_NB',
-#'KNN_5',
-#'KNN_2',
+'KNN_5',
 #'logistic_regression',
 #'SVM',
 ]

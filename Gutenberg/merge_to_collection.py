@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import argparse
 import glob
-
+from tadm import tqdm
 
 """
 Merge many files downloaded from the Gutenberg Project into a single 
@@ -74,7 +74,7 @@ def save_as_txt(path_to_data, path_to_list, out_folder) :
   print("Reading and merging...")
   df = pd.DataFrame()
 
-  for fn in lo_files :
+  for fn in tqdm(lo_files) :
       try :
        rec = pd.read_csv(fn)
        doc_id = rec['doc_id'].values[0]

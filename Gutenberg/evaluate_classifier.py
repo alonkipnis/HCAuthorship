@@ -14,13 +14,13 @@ import sys
 from typing import List
 
 
-data_cloud_path = '/scratch/users/kipnisal/Data/Gutenberg'
+#data_cloud_path = '/scratch/users/kipnisal/Data/Gutenberg'
 data_local_path = '/Users/kipnisal/Data/Gutenberg/Data'
 
-cloud_lib_path = '/scratch/users/kipnisal/Lib/AuthorshipAttribution'
+cloud_lib_path = '../'
 local_lib_path = '/Users/kipnisal/Data/Gutenberg/HCAuthorship'
 
-cloud_vocab_file = '/Users/kipnisal/authorship/HCAuthorship/google-books-common-words.txt'
+cloud_vocab_file = '../google-books-common-words.txt'
 local_vocab_file = '../google-books-common-words.txt'
 
 try :

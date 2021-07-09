@@ -127,7 +127,7 @@ def read_data(data_path) :
     return pd.read_csv(fn[0])
 
 
-def evaluate_classifier(clf_name, vocab_size, n_split) -> List :
+def evaluate_classifier(clf_name, data_path, vocab_size, n_split) -> List :
 
     clf = lo_classifiers[clf_name](**lo_args[clf_name])
 
@@ -136,10 +136,10 @@ def evaluate_classifier(clf_name, vocab_size, n_split) -> List :
     #load data:
 
     vocab = get_n_most_common_words(vocab_size)
-    #data_df = read_data(data_path)
-    #X, y = get_counts_labels(data_df, vocab)
+    data_df = read_data(data_path)
+    X, y = get_counts_labels(data_df, vocab)
 
-    X, y = get_counts_labels_from_folder(data_path, vocab)    
+    #X, y = get_counts_labels_from_folder(data_path, vocab)    
 
     acc = []
     
@@ -188,7 +188,7 @@ def main() :
   print('\tdata file = {}'.format(input_filename))
   print('\tsplit parameter = {}'.format(n_split))
   print('\tvocabulary size = {}'.format(vocab_size))
-  acc, std = evaluate_classifier(args.i, clf_name, vocab_size, n_split)
+  acc, std = evaluate_classifier(clf_name, args.i, vocab_size, n_split)
   print("Average accuracy = {}".format(clf_name, acc))
   
   print("STD = {}".format(clf_name, std))

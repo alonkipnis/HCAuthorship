@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import argparse
 import glob
-from tadm import tqdm
+from tqdm import tqdm
 
 """
 Merge many files downloaded from the Gutenberg Project into a single 

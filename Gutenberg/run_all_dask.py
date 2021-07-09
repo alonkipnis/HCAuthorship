@@ -12,14 +12,14 @@ from dask.distributed import Client
 clf_names=[
 'freq_table_chisq',
 #'freq_table_cosine',
-#'freq_table_LL',
-#'freq_table_CR',
+'freq_table_LL',
+'freq_table_CR',
 'freq_table_HC',
-#'multinomial_NB',
-#'KNN_5',
+'multinomial_NB',
+'KNN_5',
 #'KNN_2',
 #'logistic_regression',
-#'SVM',
+'SVM',
 ]
 
 
@@ -47,7 +47,7 @@ def main() :
   no_clf = len(clf_names)
 
 
-  client = Client()
+  client = Client(memory_limit='6GB')
     #print(client)
  
   def evaluate_classifier_d(params) :

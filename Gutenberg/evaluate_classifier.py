@@ -58,6 +58,7 @@ lo_classifiers = {
             'multinomial_NB' : MultinomialNB,
             'random_forest' : RandomForestClassifier,
             'KNN_5' : KNeighborsClassifier,
+            'KNN_2' : KNeighborsClassifier,
             'logistic_regression' : LogisticRegression,
             'SVM' : LinearSVC,
             'NeuralNet' : MLPClassifier,

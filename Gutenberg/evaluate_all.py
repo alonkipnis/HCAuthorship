@@ -48,7 +48,6 @@ clf_names=[
 vocab_sizes=[250, 1000, 3000]
 df = pd.DataFrame()
 
-
 n_split = 10
 no_clf = 9
 no_vocab_sizes = 3
@@ -58,12 +57,12 @@ for ic in range(no_clf) :
         clf_name = clf_names[ic]
         print("classifier = {}".format(clf_name))
         print("vocab size = {}".format(vocab_size))
-        acc = evaluate_classifier(clf_name, vocab_size, n_split)
+        acc, std = evaluate_classifier(clf_name, vocab_size, n_split)
         print("avg. accuracy = {}".format(np.mean(acc)))
         df = df.append({'clf_name' : clf_name,
             'vocab_size' : vocab_size,
-            'accuracy' : np.mean(acc),
-            'std' : np.std(acc),
+            'accuracy' : acc,
+            'std' : std,
             'n_split' : n_split
             }, ignore_index = True)        
         df.to_csv('results.csv')

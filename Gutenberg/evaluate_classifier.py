@@ -44,8 +44,7 @@ most_common_list = pd.read_csv(vocab_file, sep = '\t', header=None
                               ).iloc[:,0].str.lower().tolist()
 
 
-
-lo_classifiers = {
+o_classifiers = {
             'freq_table_chisq' : FreqTableClassifier,
             'freq_table_cosine' : FreqTableClassifier,
             'freq_table_LL' : FreqTableClassifier,
@@ -55,16 +54,18 @@ lo_classifiers = {
             'freq_table_CR' : FreqTableClassifier,
             'freq_table_HC' : FreqTableClassifier,
             'multinomial_NB' : MultinomialNB,
+            'random_forest' : RandomForestClassifier,
             'KNN_5' : KNeighborsClassifier,
-            'KNN_2' : KNeighborsClassifier,
             'logistic_regression' : LogisticRegression,
             'SVM' : LinearSVC,
             'NeuralNet' : MLPClassifier,
+             'logistic_regression' : LogisticRegression,
                 }
 
-lo_args = {'multinomial_NB' : {},
+
+o_args = {'multinomial_NB' : {},
            'freq_table_HC' : {'metric' : 'HC',
-                          'alpha' : 0.2},
+                          'gamma' : 0.2},
            'freq_table_chisq' : {'metric' : 'chisq'},
            'freq_table_cosine' : {'metric' : 'cosine'},
            'freq_table_LL' : {'metric' : 'log-likelihood'},
@@ -72,14 +73,15 @@ lo_args = {'multinomial_NB' : {},
            'freq_table_FT' : {'metric' : "freeman-tukey"},
            'freq_table_Neyman' : {'metric' : "neyman"},
            'freq_table_CR' : {'metric' : "cressie-read"},
-           'KNN_5' : {'metric' : 'cosine',
+            'KNN_5' : {'metric' : 'cosine',
                           'n_neighbors' : 5},
            'KNN_2' : {'metric' : 'cosine',
                           'n_neighbors' : 2},
-            'SVM' : {'loss' : 'hinge'},
-            'NeuralNet' : {'hidden_layer_sizes' : (1000, 500, 500, 500, 500),
-            'early_stopping' : True,
-             'alpha' : 1, 'max_iter' : 1000, },
+            'SVM' : {},
+            'NeuralNet' : {'alpha' : 1, 'max_iter' : 1000, },
+            'random_forest' : {'max_depth' : 10, 'n_estimators' : 20,
+            'max_features' : 1},
+            'logistic_regression' : {},
             }
 
 
@@ -132,7 +134,6 @@ def evaluate_classifier(clf_name, vocab_size, n_split) -> List :
     kf = KFold(n_splits=n_split, shuffle=True)
 
     #load data:
-    
 
     vocab = get_n_most_common_words(vocab_size)
     #data_df = read_data(data_path)
@@ -149,4 +150,48 @@ def evaluate_classifier(clf_name, vocab_size, n_split) -> List :
         clf.fit(X_train,y_train)
         acc += [clf.score(X_test, y_test)]
 
-    return acc
+    return np.mean(acc), np.std(acc)
+
+
+def main() :
+  parser = argparse.ArgumentParser()
+  parser = argparse.ArgumentParser(description='Evaluate classifier on'
+  ' Authorship challenge')
+  parser.add_argument('-i', type=str, help='data file (csv)')
+  parser.add_argument('-n', type=str, help='n split (integer)')
+  parser.add_argument('-s', type=str, help='vocabulary size (integer)')
+  parser.add_argument('-c', type=str, help='classifier name (one of '\
+    + str(lo_classifiers) +')')
+  args = parser.parse_args()
+  if not args.i:
+      print('ERROR: The data file is required')
+      parser.exit(1)
+  else :
+    input_filename = args.i
+  
+  if not args.c:
+      clf_name = 'freq_table_HC'
+  else :
+    clf_name = args.c
+
+  if not args.s :
+    vocab_size = 500
+  else :
+    vocab_size = args.s
+
+  if not args.n:
+      n_split = 10
+  else :
+    n_split = args.n
+
+  print('Evaluating classifier {}'.format(clf_name))
+  print('\tdata file = {}'.format(input_filename))
+  print('\tsplit parameter = {}'.format(n_split))
+  print('\tvocabulary size = {}'.format(vocab_size))
+  acc, std = evaluate_classifier(args.i, clf_name, vocab_size, n_split)
+  print("Average accuracy = {}".format(clf_name, acc))
+  
+  print("STD = {}".format(clf_name, std))
+
+if __name__ == '__main__':
+  main()

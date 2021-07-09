@@ -56,8 +56,8 @@ def evaluate_classifier_d(params) :
     return evaluate_classifier(params[0], params[1], params[2])
 
 if __name__ == '__main__':
-    client = Client()
-    print(client)
+    #client = Client()
+    #print(client)
 
     lo_fut = []
     lo_params = [(clf_name, vocab_size, n_split) for clf_name in clf_names for vocab_size in vocab_sizes]

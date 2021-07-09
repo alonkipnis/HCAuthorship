@@ -9,16 +9,18 @@ from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 from sklearn.model_selection import KFold
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier
 import glob
 import sys
 from typing import List
-
+import argparse
+from tqdm import tqdm
 
 #data_cloud_path = '/scratch/users/kipnisal/Data/Gutenberg'
 data_local_path = '/Users/kipnisal/Data/Gutenberg/Data'
 
 cloud_lib_path = '../'
-local_lib_path = '/Users/kipnisal/Data/Gutenberg/HCAuthorship'
+local_lib_path = '/Authorship'
 
 cloud_vocab_file = '../google-books-common-words.txt'
 local_vocab_file = '../google-books-common-words.txt'
@@ -35,7 +37,7 @@ except :
     lib_path = local_lib_path
     vocab_file = local_vocab_file
 
-sys.path.append(lib_path)
+sys.path.append("../")
 from AuthAttLib.AuthAttLib import to_docTermCounts
 from AuthAttLib.FreqTable import FreqTable, FreqTableClassifier
 
@@ -44,7 +46,7 @@ most_common_list = pd.read_csv(vocab_file, sep = '\t', header=None
                               ).iloc[:,0].str.lower().tolist()
 
 
-o_classifiers = {
+lo_classifiers = {
             'freq_table_chisq' : FreqTableClassifier,
             'freq_table_cosine' : FreqTableClassifier,
             'freq_table_LL' : FreqTableClassifier,
@@ -59,11 +61,11 @@ o_classifiers = {
             'logistic_regression' : LogisticRegression,
             'SVM' : LinearSVC,
             'NeuralNet' : MLPClassifier,
-             'logistic_regression' : LogisticRegression,
+            'logistic_regression' : LogisticRegression,
                 }
 
 
-o_args = {'multinomial_NB' : {},
+lo_args = {'multinomial_NB' : {},
            'freq_table_HC' : {'metric' : 'HC',
                           'gamma' : 0.2},
            'freq_table_chisq' : {'metric' : 'chisq'},
@@ -77,7 +79,7 @@ o_args = {'multinomial_NB' : {},
                           'n_neighbors' : 5},
            'KNN_2' : {'metric' : 'cosine',
                           'n_neighbors' : 2},
-            'SVM' : {},
+            'SVM' : {'loss' : 'hinge'},
             'NeuralNet' : {'alpha' : 1, 'max_iter' : 1000, },
             'random_forest' : {'max_depth' : 10, 'n_estimators' : 20,
             'max_features' : 1},
@@ -118,13 +120,27 @@ def get_counts_labels_from_folder(data_folder_path, vocab) :
     return X, y
 
 
-def read_data(data_path) :
-    fn = glob.glob(data_path + '/Gutenberg*.csv')
+def get_counts_labels_from_file(data_path, vocab) :
+    X = []
+    y = []
+    fn = glob.glob(data_path)
     if len(fn) == 0 :
         print(f"Did not find any files in {data_path}")
         exit(1)
-    print(f"Reading data from {fn[0]}")
-    return pd.read_csv(fn[0])
+    print(f"Reading data from {fn[0]}...", end=' ')
+    df = pd.read_csv(fn[0])
+    print("Done.")
+
+    X = []
+    y = []
+    for r in df.iterrows() :
+        dt = to_docTermCounts([r[1].text], 
+                            vocab=vocab
+                             )
+        X += [FreqTable(dt[0], dt[1])._counts]
+        y += [r[1].author]
+    
+    return X, y
 
 
 def evaluate_classifier(clf_name, data_path, vocab_size, n_split) -> List :
@@ -136,14 +152,13 @@ def evaluate_classifier(clf_name, data_path, vocab_size, n_split) -> List :
     #load data:
 
     vocab = get_n_most_common_words(vocab_size)
-    data_df = read_data(data_path)
-    X, y = get_counts_labels(data_df, vocab)
-
+    #data_df = read_data(data_path)
+    X, y = get_counts_labels_from_file(data_path, vocab)
     #X, y = get_counts_labels_from_folder(data_path, vocab)    
 
     acc = []
     
-    for train_index, test_index in kf.split(X):
+    for train_index, test_index in tqdm(kf.split(X)):
         X_train, X_test = np.array(X)[train_index], np.array(X)[test_index]
         y_train, y_test = np.array(y)[train_index], np.array(y)[test_index]
                 
@@ -158,40 +173,26 @@ def main() :
   parser = argparse.ArgumentParser(description='Evaluate classifier on'
   ' Authorship challenge')
   parser.add_argument('-i', type=str, help='data file (csv)')
-  parser.add_argument('-n', type=str, help='n split (integer)')
-  parser.add_argument('-s', type=str, help='vocabulary size (integer)')
+  parser.add_argument('-n', type=str, help='n split (integer)', default=10)
+  parser.add_argument('-s', type=str, help='vocabulary size (integer)', default=500)
   parser.add_argument('-c', type=str, help='classifier name (one of '\
-    + str(lo_classifiers) +')')
+    + str(lo_classifiers) +')', default='freq_table_HC')
   args = parser.parse_args()
   if not args.i:
       print('ERROR: The data file is required')
       parser.exit(1)
   else :
     input_filename = args.i
-  
-  if not args.c:
-      clf_name = 'freq_table_HC'
-  else :
-    clf_name = args.c
 
-  if not args.s :
-    vocab_size = 500
-  else :
-    vocab_size = args.s
-
-  if not args.n:
-      n_split = 10
-  else :
-    n_split = args.n
-
-  print('Evaluating classifier {}'.format(clf_name))
+ 
+  print('Evaluating classifier {}'.format(args.c))
   print('\tdata file = {}'.format(input_filename))
-  print('\tsplit parameter = {}'.format(n_split))
-  print('\tvocabulary size = {}'.format(vocab_size))
-  acc, std = evaluate_classifier(clf_name, args.i, vocab_size, n_split)
-  print("Average accuracy = {}".format(clf_name, acc))
+  print('\tnumber of train/val splits = {}'.format(args.n))
+  print('\tvocabulary size = {}'.format(args.s))
+  acc, std = evaluate_classifier(args.c, args.i, args.s, args.n)
+  print("Average accuracy = {}".format(acc))
   
-  print("STD = {}".format(clf_name, std))
+  print("STD = {}".format(std))
 
 if __name__ == '__main__':
   main()

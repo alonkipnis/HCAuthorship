@@ -1,0 +1,3 @@
+Running locally
+	Data: /scratch/users/kipnisal/Data/Gutenberg_reduced.csv
+	Number of train/val splits = 10

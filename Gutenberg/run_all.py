@@ -9,17 +9,17 @@ from evaluate_classifier import evaluate_classifier
 
 
 clf_names=[
-#'freq_table_chisq',
+'freq_table_HC',
+'freq_table_chisq',
 'freq_table_cosine',
-#'freq_table_LL',
-#'freq_table_CR',
-#'freq_table_HC',
-#'multinomial_NB',
-#'KNN_5',
-#'KNN_2',
+'freq_table_LL',
+'freq_table_CR',
+'multinomial_NB',
+'KNN_5',
+'KNN_2',
 #'logistic_regression',
 'NeuralNet',
-#'SVM',
+'SVM',
 ]
 
 
@@ -28,7 +28,7 @@ def main() :
   parser = argparse.ArgumentParser(description='Evaluate hardcoded list of '
   'classifiers Authorship challenge')
   parser.add_argument('-i', type=str, help='data file (csv)')
-  parser.add_argument('-n', type=str, help='n split (integer)', default=10)
+  parser.add_argument('-n', type=str, help='n split (integer)', default=20)
   args = parser.parse_args()
   if not args.i:
       print('ERROR: The data file is required')

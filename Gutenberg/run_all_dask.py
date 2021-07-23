@@ -11,7 +11,7 @@ from dask.distributed import Client
 
 clf_names=[
 #'freq_table_chisq',
-#'freq_table_cosine',
+'freq_table_cosine',
 #'freq_table_LL',
 #'freq_table_CR',
 #'freq_table_HC',
@@ -24,9 +24,9 @@ clf_names=[
 #'multinomial_NB',
 #'KNN_5',
 #'KNN_2',
-'logistic_regression',
-'NeuralNet',
-'random_forest'
+#'logistic_regression',
+#'NeuralNet',
+#'random_forest'
 #'SVM',
 ]
 

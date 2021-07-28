@@ -1,39 +1,0 @@
-0it [00:00, ?it/s]1it [00:35, 35.30s/it]2it [01:11, 35.58s/it]3it [01:47, 35.80s/it]4it [02:24, 36.06s/it]5it [03:00, 36.10s/it]6it [03:37, 36.38s/it]7it [04:14, 36.64s/it]8it [04:52, 36.84s/it]9it [05:29, 36.87s/it]10it [06:06, 37.02s/it]10it [06:06, 36.66s/it]
-0it [00:00, ?it/s]1it [00:57, 57.42s/it]2it [01:54, 57.24s/it]3it [02:51, 57.37s/it]4it [03:49, 57.50s/it]5it [04:47, 57.49s/it]6it [05:44, 57.59s/it]7it [06:43, 57.92s/it]8it [07:42, 58.20s/it]9it [08:42, 58.65s/it]10it [09:41, 58.73s/it]10it [09:41, 58.12s/it]
-0it [00:00, ?it/s]1it [01:51, 111.68s/it]2it [03:40, 110.90s/it]3it [05:30, 110.53s/it]4it [07:22, 111.09s/it]5it [09:15, 111.47s/it]6it [11:07, 111.58s/it]7it [12:59, 111.94s/it]8it [14:52, 112.19s/it]9it [16:46, 112.68s/it]10it [18:41, 113.32s/it]10it [18:41, 112.12s/it]
-0it [00:00, ?it/s]1it [00:37, 37.69s/it]2it [01:14, 37.47s/it]3it [02:01, 40.43s/it]4it [02:57, 44.87s/it]5it [03:52, 47.98s/it]6it [04:40, 47.98s/it]7it [05:43, 52.57s/it]8it [06:27, 50.01s/it]9it [07:16, 49.54s/it]10it [08:07, 50.02s/it]10it [08:07, 48.73s/it]
-0it [00:00, ?it/s]1it [01:09, 69.93s/it]2it [02:28, 72.55s/it]3it [03:44, 73.61s/it]4it [04:57, 73.35s/it]5it [06:13, 74.05s/it]6it [07:27, 74.24s/it]7it [08:40, 73.90s/it]8it [09:51, 72.85s/it]9it [10:57, 70.92s/it]10it [12:09, 71.26s/it]10it [12:09, 72.98s/it]
-0it [00:00, ?it/s]1it [01:45, 105.44s/it]2it [03:49, 110.89s/it]3it [06:39, 128.81s/it]4it [09:33, 142.46s/it]5it [11:31, 135.04s/it]6it [13:32, 130.89s/it]7it [15:15, 122.30s/it]8it [16:23, 106.11s/it]9it [18:22, 109.85s/it]10it [19:58, 105.87s/it]10it [19:58, 119.87s/it]
-Running locally
-	Data: /scratch/users/kipnisal/Data/Gutenberg_reduced.csv
-	Number of train/val splits = 10
-classifier = freq_table_cosine
-vocab size = 250
-Reading data from /scratch/users/kipnisal/Data/Gutenberg_reduced.csv... Done.
-Average accuracy = 0.5034877595821206
-STD = 0.01259737778133115
-classifier = freq_table_cosine
-vocab size = 1000
-Reading data from /scratch/users/kipnisal/Data/Gutenberg_reduced.csv... Done.
-Average accuracy = 0.5238635472711414
-STD = 0.02089910169706946
-classifier = freq_table_cosine
-vocab size = 3000
-Reading data from /scratch/users/kipnisal/Data/Gutenberg_reduced.csv... Done.
-Average accuracy = 0.5422420594086576
-STD = 0.011465144825107543
-classifier = NeuralNet
-vocab size = 250
-Reading data from /scratch/users/kipnisal/Data/Gutenberg_reduced.csv... Done.
-Average accuracy = 0.675010902694068
-STD = 0.025218127713245844
-classifier = NeuralNet
-vocab size = 1000
-Reading data from /scratch/users/kipnisal/Data/Gutenberg_reduced.csv... Done.
-Average accuracy = 0.6949367398739696
-STD = 0.05223649797228754
-classifier = NeuralNet
-vocab size = 3000
-Reading data from /scratch/users/kipnisal/Data/Gutenberg_reduced.csv... Done.
-Average accuracy = 0.7204078832603221
-STD = 0.055271882379772555

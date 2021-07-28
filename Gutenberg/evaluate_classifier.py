@@ -15,6 +15,8 @@ import sys
 from typing import List
 import argparse
 from tqdm import tqdm
+import warnings
+warnings.filterwarnings('ignore')
 
 #data_cloud_path = '/scratch/users/kipnisal/Data/Gutenberg'
 data_local_path = '/Users/kipnisal/Data/Gutenberg/Data'
@@ -174,8 +176,8 @@ def main() :
   parser = argparse.ArgumentParser(description='Evaluate classifier on'
   ' Authorship challenge')
   parser.add_argument('-i', type=str, help='data file (csv)')
-  parser.add_argument('-n', type=str, help='n split (integer)', default=10)
-  parser.add_argument('-s', type=str, help='vocabulary size (integer)', default=500)
+  parser.add_argument('-n', type=int, help='n split (integer)', default=10)
+  parser.add_argument('-s', type=int, help='vocabulary size (integer)', default=500)
   parser.add_argument('-c', type=str, help='classifier name (one of '\
     + str(lo_classifiers) +')', default='freq_table_HC')
   args = parser.parse_args()

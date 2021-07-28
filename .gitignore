@@ -2,3 +2,4 @@
 */dask*
 */env
 env*
+*.sh

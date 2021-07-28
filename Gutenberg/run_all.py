@@ -14,12 +14,12 @@ clf_names=[
 'freq_table_cosine',
 'freq_table_LL',
 'freq_table_CR',
-'multinomial_NB',
+#'multinomial_NB',
 'KNN_5',
-'KNN_2',
+#'KNN_2',
 #'logistic_regression',
-'NeuralNet',
-'SVM',
+#'NeuralNet',
+#'SVM',
 ]
 
 
@@ -28,7 +28,7 @@ def main() :
   parser = argparse.ArgumentParser(description='Evaluate hardcoded list of '
   'classifiers Authorship challenge')
   parser.add_argument('-i', type=str, help='data file (csv)')
-  parser.add_argument('-n', type=str, help='n split (integer)', default=20)
+  parser.add_argument('-n', type=int, help='n split (integer)', default=20)
   args = parser.parse_args()
   if not args.i:
       print('ERROR: The data file is required')

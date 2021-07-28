@@ -18,34 +18,10 @@ from tqdm import tqdm
 import warnings
 warnings.filterwarnings('ignore')
 
-#data_cloud_path = '/scratch/users/kipnisal/Data/Gutenberg'
-data_local_path = '/Users/kipnisal/Data/Gutenberg/Data'
-
-cloud_lib_path = '../'
-local_lib_path = '/Authorship'
-
-cloud_vocab_file = '../google-books-common-words.txt'
-local_vocab_file = '../google-books-common-words.txt'
-
-try :
-    os.listdir(data_cloud_path)
-    data_path = data_cloud_path
-    lib_path = cloud_lib_path
-    vocab_file = local_vocab_file
-    print('Running remotely')
-except :
-    print('Running locally')
-    data_path = data_local_path
-    lib_path = local_lib_path
-    vocab_file = local_vocab_file
 
 sys.path.append("../")
 from AuthAttLib.AuthAttLib import to_docTermCounts
 from AuthAttLib.FreqTable import FreqTable, FreqTableClassifier
-
-
-most_common_list = pd.read_csv(vocab_file, sep = '\t', header=None
-                              ).iloc[:,0].str.lower().tolist()
 
 
 lo_classifiers = {
@@ -90,21 +66,29 @@ lo_args = {'multinomial_NB' : {},
             }
 
 
-def get_n_most_common_words(n = 5000) :
-    return most_common_list[:n]
 
-def get_counts_labels(df, vocab) :
-#prepare data:
+def get_counts_labels_from_file_by_line(data_path, vocab) :
     X = []
     y = []
-    for r in df.iterrows() :
-        dt = to_docTermCounts([r[1].text], 
-                            vocab=vocab
-                             )
-        X += [FreqTable(dt[0], dt[1])._counts]
-        y += [r[1].author]
-    
+    fn = glob.glob(data_path)
+    if len(fn) == 0 :
+        print(f"Did not find any files in {data_path}")
+        exit(1)
+
+    print(f"Reading data from {fn[0]}...", end=' ')
+    X = []
+    Y = []
+    df = pd.read_csv(fn[0], chunksize=500)
+    for chunk in tqdm(df, unit = " chunks per") :
+        for r in chunk.iterrows() :
+            dt = to_docTermCounts([r[1].text], 
+                                vocab=vocab
+                                 )
+            X += [FreqTable(dt[0], dt[1])._counts]
+            y += [r[1].author]
+
     return X, y
+
 
 def get_counts_labels_from_folder(data_folder_path, vocab) :
     X = []
@@ -145,18 +129,24 @@ def get_counts_labels_from_file(data_path, vocab) :
     
     return X, y
 
+def get_counts_labels(*args) :
+    return get_counts_labels_from_file_by_line(*args)
+
 
 def evaluate_classifier(clf_name, data_path, vocab_size, n_split) -> List :
+    """
+    Mean accuracy and std over n_split runs
 
+    """
     clf = lo_classifiers[clf_name](**lo_args[clf_name])
 
     kf = KFold(n_splits=n_split, shuffle=True)
 
     #load data:
 
-    vocab = get_n_most_common_words(vocab_size)
+    vocab = get_vocab(vocab_file, vocab_size)
     #data_df = read_data(data_path)
-    X, y = get_counts_labels_from_file(data_path, vocab)
+    X, y = get_counts_labels(data_path, vocab)
     #X, y = get_counts_labels_from_folder(data_path, vocab)    
 
     acc = []

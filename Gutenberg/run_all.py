@@ -9,13 +9,13 @@ from evaluate_classifier import evaluate_classifier
 
 
 clf_names=[
-'freq_table_HC',
-'freq_table_chisq',
+#'freq_table_HC',
+#'freq_table_chisq',
 'freq_table_cosine',
-'freq_table_LL',
-'freq_table_CR',
+#'freq_table_LL',
+#'freq_table_CR',
 #'multinomial_NB',
-'KNN_5',
+#'KNN_5',
 #'KNN_2',
 #'logistic_regression',
 #'NeuralNet',

@@ -67,6 +67,14 @@ lo_args = {'multinomial_NB' : {},
 
 
 
+vocab_file = '../google-books-common-words.txt'
+def get_vocab(vocab_file, n = 5000) :
+    most_common_list = pd.read_csv(vocab_file, sep = '\t', header=None
+                              ).iloc[:,0].str.lower().tolist()
+
+    return most_common_list[:n]
+
+
 def get_counts_labels_from_file_by_line(data_path, vocab) :
     X = []
     y = []

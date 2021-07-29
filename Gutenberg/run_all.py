@@ -9,13 +9,13 @@ from evaluate_classifier import evaluate_classifier
 
 
 clf_names=[
-#'freq_table_HC',
-#'freq_table_chisq',
+'freq_table_HC',
+'freq_table_chisq',
 'freq_table_cosine',
-#'freq_table_LL',
-#'freq_table_CR',
+'freq_table_LL',
+'freq_table_CR',
 #'multinomial_NB',
-#'KNN_5',
+'KNN_5',
 #'KNN_2',
 #'logistic_regression',
 #'NeuralNet',
@@ -40,12 +40,13 @@ def main() :
   print('\tNumber of train/val splits = {}'.format(args.n))
 
   vocab_sizes=[250, 1000, 3000]
-  df = pd.DataFrame()
+  
 
   n_split = args.n
   no_vocab_sizes = len(vocab_sizes)
   no_clf = len(clf_names)
 
+  df = pd.DataFrame()
   for ic in range(no_clf) :
     for iv in range(no_vocab_sizes) :
         vocab_size = vocab_sizes[iv] 

@@ -46,7 +46,7 @@ lo_classifiers = {
 
 lo_args = {'multinomial_NB' : {},
            'freq_table_HC' : {'metric' : 'HC',
-                          'gamma' : 0.2},
+                          'gamma' : 0.2, 'HCtype' : 'original'},
            'freq_table_chisq' : {'metric' : 'chisq'},
            'freq_table_cosine' : {'metric' : 'cosine'},
            'freq_table_LL' : {'metric' : 'log-likelihood'},

@@ -46,7 +46,7 @@ lo_classifiers = {
 
 lo_args = {'multinomial_NB' : {},
            'freq_table_HC' : {'metric' : 'HC',
-                          'gamma' : 0.2, 'HCtype' : 'HCstar'},
+                          'gamma' : 0.2, 'HCtype' : 'original'},
            'freq_table_chisq' : {'metric' : 'chisq'},
            'freq_table_cosine' : {'metric' : 'cosine'},
            'freq_table_LL' : {'metric' : 'log-likelihood'},
@@ -87,7 +87,7 @@ def get_counts_labels_from_file_by_line(data_path, vocab) :
     X = []
     Y = []
     df = pd.read_csv(fn[0], chunksize=500)
-    for chunk in tqdm(df, unit = " chunks per") :
+    for chunk in tqdm(df, unit = " chunk") :
         for r in chunk.iterrows() :
             dt = to_docTermCounts([r[1].text], 
                                 vocab=vocab

@@ -12,13 +12,27 @@ from dask.distributed import Client
 clf_names=[
 'freq_table_HC',
 #'freq_table_chisq',
+<<<<<<< HEAD
 #'freq_table_cosine',
 'freq_table_chisq',
+=======
+>>>>>>> cd914fc (updated HC lib and notebook)
 'freq_table_cosine',
 #'freq_table_LL',
 #'freq_table_CR',
 #'multinomial_NB',
+<<<<<<< HEAD
 'KNN_5',
+=======
+#'KNN_5',
+#'freq_table_cosine',
+#'freq_table_LL',
+#'freq_table_CR',
+#'freq_table_HC',
+#'multinomial_NB',
+#'KNN_5',
+#'KNN_2',
+>>>>>>> cd914fc (updated HC lib and notebook)
 #'logistic_regression',
 #'NeuralNet',
 #'random_forest'

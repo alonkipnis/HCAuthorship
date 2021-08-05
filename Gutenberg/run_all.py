@@ -10,16 +10,28 @@ from count_words import get_word_counts_from_pkl_file
 
 
 clf_names=[
+<<<<<<< HEAD:Gutenberg/run_all.py
 'freq_table_HC',
 'freq_table_chisq',
 'freq_table_cosine',
 'freq_table_LL',
 'freq_table_CR',
+=======
+#'freq_table_chisq',
+'freq_table_cosine',
+#'freq_table_LL',
+#'freq_table_CR',
+#'freq_table_HC',
+>>>>>>> a5ca66c (results for cosine and NN):Gutenberg/evaluate_all.py
 #'multinomial_NB',
 'KNN_5',
 #'KNN_2',
 #'logistic_regression',
+<<<<<<< HEAD:Gutenberg/run_all.py
 #'NeuralNet',
+=======
+'NeuralNet',
+>>>>>>> a5ca66c (results for cosine and NN):Gutenberg/evaluate_all.py
 #'SVM',
 ]
 

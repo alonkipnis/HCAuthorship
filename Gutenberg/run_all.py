@@ -6,6 +6,7 @@ from sklearn.model_selection import KFold
 import sys
 import argparse
 from evaluate_classifier import evaluate_classifier
+from count_words import get_word_counts_from_pkl_file
 
 
 clf_names=[
@@ -49,11 +50,16 @@ def main() :
   df = pd.DataFrame()
   for ic in range(no_clf) :
     for iv in range(no_vocab_sizes) :
-        vocab_size = vocab_sizes[iv] 
+        vocab_size = vocab_sizes[iv]
         clf_name = clf_names[ic]
         print("classifier = {}".format(clf_name))
         print("vocab size = {}".format(vocab_size))
-        acc, std = evaluate_classifier(clf_name, data_path, vocab_size, n_split)
+
+        print(f"Loading data from {args.i}..,", end=' ')
+        data = get_word_counts_from_pkl_file(args.i)
+        print(f"Found {len(data[0])} samples.")
+
+        acc, std = evaluate_classifier(clf_name, data, n_split)
         print("Average accuracy = {}".format(acc))  
         print("STD = {}".format(std))
 

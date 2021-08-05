@@ -20,9 +20,9 @@ warnings.filterwarnings('ignore')
 
 
 sys.path.append("../")
-from AuthAttLib.AuthAttLib import to_docTermCounts
-from AuthAttLib.FreqTable import FreqTable, FreqTableClassifier
+from AuthAttLib.FreqTable import FreqTableClassifier
 
+from count_words import get_word_counts_from_pkl_file
 
 lo_classifiers = {
             'freq_table_chisq' : FreqTableClassifier,
@@ -67,81 +67,7 @@ lo_args = {'multinomial_NB' : {},
 
 
 
-vocab_file = '../google-books-common-words.txt'
-def get_vocab(vocab_file, n = 5000) :
-    most_common_list = pd.read_csv(vocab_file, sep = '\t', header=None
-                              ).iloc[:,0].str.lower().tolist()
-
-    return most_common_list[:n]
-
-
-def get_counts_labels_from_file_by_line(data_path, vocab) :
-    X = []
-    y = []
-    fn = glob.glob(data_path)
-    if len(fn) == 0 :
-        print(f"Did not find any files in {data_path}")
-        exit(1)
-
-    print(f"Reading data from {fn[0]}:")
-    X = []
-    Y = []
-    df = pd.read_csv(fn[0], chunksize=500)
-    for chunk in tqdm(df, unit = " chunk") :
-        for r in chunk.iterrows() :
-            dt = to_docTermCounts([r[1].text], 
-                                vocab=vocab
-                                 )
-            X += [FreqTable(dt[0], dt[1])._counts]
-            y += [r[1].author]
-
-    return X, y
-
-
-def get_counts_labels_from_folder(data_folder_path, vocab) :
-    X = []
-    y = []
-    print(f"Reading data from {data_folder_path}....", end=" ")
-    lo_files = glob.glob(data_folder_path + '/*.csv')
-    print(f"Found {len(lo_files)} files.")
-    for fn in lo_files :
-        try :
-            dfr = pd.read_csv(fn)
-            dt = to_docTermCounts(dfr.text, vocab=vocab)
-            X += [FreqTable(dt[0], dt[1])._counts]
-            y += dfr.author.values[0]
-        except :
-            print(f"Could not read {fn}.")
-    return X, y
-
-
-def get_counts_labels_from_file(data_path, vocab) :
-    X = []
-    y = []
-    fn = glob.glob(data_path)
-    if len(fn) == 0 :
-        print(f"Did not find any files in {data_path}")
-        exit(1)
-    print(f"Reading data from {fn[0]}...", end=' ')
-    df = pd.read_csv(fn[0])
-    print("Done.")
-
-    X = []
-    y = []
-    for r in df.iterrows() :
-        dt = to_docTermCounts([r[1].text], 
-                            vocab=vocab
-                             )
-        X += [FreqTable(dt[0], dt[1])._counts]
-        y += [r[1].author]
-    
-    return X, y
-
-def get_counts_labels(*args) :
-    return get_counts_labels_from_file_by_line(*args)
-
-
-def evaluate_classifier(clf_name, data_path, vocab_size, n_split) -> List :
+def evaluate_classifier(clf_name, data, n_split) -> List :
     """
     Mean accuracy and std over n_split runs
 
@@ -152,9 +78,7 @@ def evaluate_classifier(clf_name, data_path, vocab_size, n_split) -> List :
 
     #load data:
 
-    vocab = get_vocab(vocab_file, vocab_size)
-    #data_df = read_data(data_path)
-    X, y = get_counts_labels(data_path, vocab)
+    X, y = data
     #X, y = get_counts_labels_from_folder(data_path, vocab)    
 
     acc = []
@@ -173,9 +97,8 @@ def main() :
   parser = argparse.ArgumentParser()
   parser = argparse.ArgumentParser(description='Evaluate classifier on'
   ' Authorship challenge')
-  parser.add_argument('-i', type=str, help='data file (csv)')
+  parser.add_argument('-i', type=str, help='data file (pkl)')
   parser.add_argument('-n', type=int, help='n split (integer)', default=10)
-  parser.add_argument('-s', type=int, help='vocabulary size (integer)', default=500)
   parser.add_argument('-c', type=str, help='classifier name (one of '\
     + str(lo_classifiers) +')', default='freq_table_HC')
   args = parser.parse_args()
@@ -186,14 +109,15 @@ def main() :
     input_filename = args.i
 
  
-  print('Evaluating classifier {}'.format(args.c))
-  print('\tdata file = {}'.format(input_filename))
-  print('\tnumber of train/val splits = {}'.format(args.n))
-  print('\tvocabulary size = {}'.format(args.s))
-  acc, std = evaluate_classifier(args.c, args.i, args.s, args.n)
-  print("Average accuracy = {}".format(acc))
-  
-  print("STD = {}".format(std))
+  print(f"Loading data from {args.i}..,", end=' ')
+  data = get_word_counts_from_pkl_file(args.i)
+  print(f"Found {len(data[0])} samples.")
+
+  print(f'Evaluating classifier {args.c}')
+  print(f'\tnumber of train/val splits = {args.n}')
+  acc, std = evaluate_classifier(args.c, data, args.n)
+  print(f"Average accuracy = {acc}")
+  print(f"STD = {std}")
 
 if __name__ == '__main__':
   main()

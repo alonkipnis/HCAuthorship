@@ -58,7 +58,7 @@ def main() :
 				fn = args.i.split('.pkl')[0]
 				data_file = fn + f'_{vocab_size}.pkl'
 
-				print(f"Loading data from {ata_file}..,", end=' ')
+				print(f"Loading data from {data_file}..,", end=' ')
 				try :
 					data = get_word_counts_from_pkl_file(data_file)
 				except : 

@@ -10,28 +10,18 @@ from count_words import get_word_counts_from_pkl_file
 
 
 clf_names=[
-<<<<<<< HEAD:Gutenberg/run_all.py
 'freq_table_HC',
 'freq_table_chisq',
 'freq_table_cosine',
 'freq_table_LL',
 'freq_table_CR',
-=======
-#'freq_table_chisq',
 'freq_table_cosine',
-#'freq_table_LL',
-#'freq_table_CR',
-#'freq_table_HC',
->>>>>>> a5ca66c (results for cosine and NN):Gutenberg/evaluate_all.py
 #'multinomial_NB',
 'KNN_5',
 #'KNN_2',
 #'logistic_regression',
-<<<<<<< HEAD:Gutenberg/run_all.py
 #'NeuralNet',
-=======
-'NeuralNet',
->>>>>>> a5ca66c (results for cosine and NN):Gutenberg/evaluate_all.py
+#'NeuralNet',
 #'SVM',
 ]
 
@@ -65,10 +55,15 @@ def main() :
         vocab_size = vocab_sizes[iv]
         clf_name = clf_names[ic]
         print("classifier = {}".format(clf_name))
-        print("vocab size = {}".format(vocab_size))
+	fn = args.i.split('.pkl')[0]
+	data_file = fn + f'_{vocab_size}.pkl'
 
-        print(f"Loading data from {args.i}..,", end=' ')
-        data = get_word_counts_from_pkl_file(args.i)
+        print(f"Loading data from {ata_file}..,", end=' ')
+	try :
+        	data = get_word_counts_from_pkl_file(data_file)
+	except : 
+		print("Could not load data file")
+		continue
         print(f"Found {len(data[0])} samples.")
 
         acc, std = evaluate_classifier(clf_name, data, n_split)
@@ -76,7 +71,7 @@ def main() :
         print("STD = {}".format(std))
 
         df = df.append({'clf_name' : clf_name,
-            'vocab_size' : vocab_size,
+            'dataset' : data_file,
             'accuracy' : acc,
             'std' : std,
             'n_split' : n_split

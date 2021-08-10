@@ -8,9 +8,9 @@ import argparse
 from evaluate_classifier import evaluate_classifier
 from count_words import get_word_counts_from_pkl_file
 
-
 clf_names=[
 'freq_table_HC',
+'freq_table_HC_org'
 'freq_table_chisq',
 'freq_table_cosine',
 'freq_table_LL',
@@ -29,7 +29,7 @@ clf_names=[
 def main() :
 	parser = argparse.ArgumentParser()
 	parser = argparse.ArgumentParser(description='Evaluate hardcoded list of '
-	'classifiers Authorship challenge')
+	'classifiers in Authorship challenge')
 	parser.add_argument('-i', type=str, help='data file (csv)')
 	parser.add_argument('-n', type=int, help='n split (integer)', default=20)
 	args = parser.parse_args()
@@ -44,7 +44,6 @@ def main() :
 
 	vocab_sizes=[250, 1000, 3000]
 	
-
 	n_split = args.n
 	no_vocab_sizes = len(vocab_sizes)
 	no_clf = len(clf_names)

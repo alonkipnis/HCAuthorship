@@ -33,6 +33,7 @@ lo_classifiers = {
             'freq_table_Neyman' : FreqTableClassifier,
             'freq_table_CR' : FreqTableClassifier,
             'freq_table_HC' : FreqTableClassifier,
+            'freq_table_HC_org' : FreqTableClassifier,
             'multinomial_NB' : MultinomialNB,
             'random_forest' : RandomForestClassifier,
             'KNN_5' : KNeighborsClassifier,
@@ -46,6 +47,8 @@ lo_classifiers = {
 
 lo_args = {'multinomial_NB' : {},
            'freq_table_HC' : {'metric' : 'HC',
+                          'gamma' : 0.2},
+           'freq_table_HC_org' : {'metric' : 'HC',
                           'gamma' : 0.2, 'HCtype' : 'original'},
            'freq_table_chisq' : {'metric' : 'chisq'},
            'freq_table_cosine' : {'metric' : 'cosine'},

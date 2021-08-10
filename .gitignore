@@ -6,4 +6,5 @@ env*
 *.out
 results*
 *.pkl
+*/*.log
 .ipynb_checkpoints/*

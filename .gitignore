@@ -2,7 +2,8 @@
 */dask*
 */env
 env*
-*.sh
+*/*.sh
 *.out
 results*
 *.pkl
+.ipynb_checkpoints/*

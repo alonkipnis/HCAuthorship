@@ -10,19 +10,19 @@ from count_words import get_word_counts_from_pkl_file
 
 clf_names=[
 'freq_table_HC',
-'freq_table_HC_org'
+'freq_table_HC_org',
 'freq_table_chisq',
 'freq_table_cosine',
 'freq_table_LL',
 'freq_table_CR',
 'freq_table_cosine',
-#'multinomial_NB',
+'multinomial_NB',
 'KNN_5',
 #'KNN_2',
 #'logistic_regression',
 #'NeuralNet',
 #'NeuralNet',
-#'SVM',
+'SVM',
 ]
 
 
@@ -42,7 +42,9 @@ def main() :
 	print('\tData: {}'.format(data_path))
 	print('\tNumber of train/val splits = {}'.format(args.n))
 
-	vocab_sizes=[250, 1000, 3000]
+	vocab_sizes=[250,
+	 1000,
+ 		3000]
 	
 	n_split = args.n
 	no_vocab_sizes = len(vocab_sizes)
@@ -75,7 +77,7 @@ def main() :
 						'std' : std,
 						'n_split' : n_split
 						}, ignore_index = True)        
-				df.to_csv('results.csv')
+				df.to_csv('results_HC_all.csv')
 
 if __name__ == '__main__':
 	main()

@@ -3,7 +3,7 @@
 This repository contains code and dataset or dataset description used to obtain the results reported in 
 <ul>
  <li> 
-[1] Alon Kipnis, <a href = >``Higher Criticism for Discriminating Word-Frequency Tables and Authorship Attribution''</a>, 2019
+[1] Alon Kipnis, <a href = >``Higher Criticism for Discriminating Word-Frequency Tables and Authorship Attribution''</a>, 2020
   </li>
 </ul>
 
@@ -19,10 +19,14 @@ AuthAttLib -- library to facilitate the use of HC-based similarity measure in au
     Federalists -- data and code (IPython notebook) for using HC to attribute authorship in the Federalist papers
   </li>
   <li>
-    Gutenberg -- code for attributing authorship using HC on a collection of more than 11,000 titles from the Gutenberg project. Also included is the list of titles and authors in this collection, and the file containing the result of the attribution procedure.
+    Gutenberg -- code for attributing authorship using HC in a collection of more than 11,000 titles from the Gutenberg project. This folder contains the list of titles and authors in this collection, code for downloading these titles, and the result of the attribution procedure.
   </li>
     <li>
       var_analysis -- code (R notebook) and data for conducting an anlysis of the variation of words within corpus and the degree by which the affect the HC calculation. 
     </li>
+     <li>
+      compare_HC_types -- code (IPython notebook) for comparing two variants of HC.
+    </li>
+
 </ul>
 

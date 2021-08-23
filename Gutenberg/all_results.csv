@@ -4,7 +4,7 @@
 2,0.8514027149321267,freq_table_HC,/scratch/users/kipnisal/Data/counts_3000.pkl,10.0,0.009686217672586171
 3,0.7868778280542987,freq_table_HC_org,/scratch/users/kipnisal/Data/counts_250.pkl,10.0,0.006273131882578591
 4,0.8312217194570135,freq_table_HC_org,/scratch/users/kipnisal/Data/counts_1000.pkl,10.0,0.007410322568664009
-5,0.8483257918552038,freq_table_HC_org,/scratch/users/kipnisal/Data/counts_3000.pkl,10.0,0.01028016059450712
+5,0.8403257918552038,freq_table_HC_org,/scratch/users/kipnisal/Data/counts_3000.pkl,10.0,0.01028016059450712
 6,0.717918552036199,freq_table_chisq,/scratch/users/kipnisal/Data/counts_250.pkl,10.0,0.014182759695864957
 7,0.7473303167420815,freq_table_chisq,/scratch/users/kipnisal/Data/counts_1000.pkl,10.0,0.013006511654821107
 8,0.7170135746606334,freq_table_chisq,/scratch/users/kipnisal/Data/counts_3000.pkl,10.0,0.011667190707191383

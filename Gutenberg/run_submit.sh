@@ -1,7 +1,7 @@
 #!/bin/bash
 #BATCH --job-name=dask
-#SBATCH --partition='donoho'
-#SBATCH --time=96:00:00
+#SBATCH --partition='owners'
+#SBATCH --time=48:00:00
 #SBATCH --ntasks=4
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=8G
